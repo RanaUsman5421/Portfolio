@@ -19,7 +19,7 @@ app.get('/api/data', (req, res) => {
 
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: 'smtp.gmail.com',
   auth: {
     user: 'macktech28@gmail.com',
     pass: 'kcwmqkdjbyryonbt',
