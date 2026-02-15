@@ -8,10 +8,7 @@ const path = require('path');
 
 
 // Allow requests from frontend
-app.use(cors({
-  origin: 'http://localhost:5173', // React app origin
- credentials: true 
-}));
+app.use(cors());
 
 app.use(express.json())
 
@@ -32,8 +29,7 @@ const transporter = nodemailer.createTransport({
 
 app.post('/send-email', async (req, res) => {
   const { name, email, phone, message } = req.body;
-   req.session.userEmail = email;
-   console.log(req.session.userEmail);
+   
   try {
     await transporter.sendMail({
       from: email,
@@ -47,6 +43,7 @@ app.post('/send-email', async (req, res) => {
       subject: `Request Recieved`,
       text: `Mr ${name}, Your Request has been recieved. I will contact you shortly`
     })
+    res.status.json({success: true})
   } catch (err) {
     res.status(500).json({success: false, message: `Email not sent due to: ${err}`})
   }
@@ -57,7 +54,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
-
-app.listen(5000, () => {
-  console.log('Backend server running on http://localhost:5000');
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Backend server running on http://localhost:${PORT}`);
 });
